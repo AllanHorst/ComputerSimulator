@@ -60,63 +60,53 @@ RSpec.describe Computer, type: :model do
 
   context '#execute' do
 
-    context 'stack' do
+    it 'stack' do
+      computer.insert('PUSH', 10)
+      computer.insert('PUSH', 50)
+      computer.insert('MULT')
+      computer.insert('CALL', new_address)
+      computer.set_address(new_address)
+      computer.insert('PUSH', 2)
+      computer.insert('PUSH', 2)
+      computer.insert('MULT')
+      puts 'EXECUTE'
+      computer.set_address(start_address)
+      computer.execute
 
-      it 'stack should be equal' do
+      expect(computer.stack).to eq([500, 4])
+    end
+
+    context 'MULT' do
+      before(:each) do
         computer.insert('PUSH', 10)
         computer.insert('PUSH', 50)
         computer.insert('MULT')
-        computer.insert('PRINT')
-        computer.insert('CALL', new_address)
-        computer.set_address(new_address)
-        computer.insert('PUSH', 2)
-        computer.insert('PUSH', 2)
-        computer.insert('MULT')
-        computer.insert('PRINT')
-        puts 'EXECUTE'
         computer.set_address(start_address)
         computer.execute
+      end
 
-        expect(computer.stack).to eq([500, 4])
+      it 'last value must be the multiplication' do
+        expect(computer.stack.last).to eq(500)
+      end
+
+      it 'should pop last values' do
+        expect(computer.stack.count).to eq(1)
+        expect(computer.stack).to_not include(10)
+        expect(computer.stack).to_not include(50)
       end
     end
 
-  # context 'MULT' do
-  #   before(:each) do
-  #     computer.insert('PUSH', 10)
-  #     computer.insert('PUSH', 50)
-  #     computer.insert('MULT')
-  #     computer.execute
-  #   end
+    it 'must stop program' do
+      computer.insert('PUSH', 10)
+      computer.insert('PUSH', 50)
+      computer.insert('STOP')
+      computer.insert('PUSH', 50)
+      computer.set_address(start_address)
+      computer.execute
 
-  #   it 'last value must be the multiplication' do
-  #     expect(computer.stack.last).to eq(500)
-  #   end
+      expect(computer.stack).to eq([10, 50])
+    end
 
-  #   it 'should pop last values' do
-  #     expect(computer.stack.count).to eq(1)
-  #     expect(computer.stack).to_not include(10)
-  #     expect(computer.stack).to_not include(50)
-  #   end
-  # end
-
-  # context 'RET' do
-  #   before(:each) do
-  #     computer.insert('PUSH', 10)
-  #     computer.insert('PUSH', 50)
-  #     computer.insert('RET')
-  #     computer.execute
-  #   end
-
-  #   it 'last value must be the multiplication' do
-  #     expect(computer.stack.last).to eq(10)
-  #   end
-
-  #   it 'should pop last values' do
-  #     expect(computer.stack.count).to eq(1)
-  #     expect(computer.stack).to_not include(50)
-  #   end
-  # end
   end
 
 end

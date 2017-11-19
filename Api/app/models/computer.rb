@@ -24,6 +24,10 @@ class Computer
   def execute
     while true do
       instruction = @instructions[@pointer]
+      puts 'POINTER<<<<<'
+      p @pointer
+      p instruction
+      p stack
       break unless instruction
 
       if instruction[:param]
@@ -50,14 +54,19 @@ class Computer
 
   def print
     increment_pointer
+    @stack.pop
   end
 
   def call(address)
     @pointer = address
   end
 
+  def stop
+    @pointer = -1
+  end
+
   def ret
-    @stack.pop
+    # TODO
   end
 
   def increment_pointer
