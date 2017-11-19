@@ -1,11 +1,11 @@
 class Computer
   include ActiveModel::Model
-  attr_accessor :pointer, :stack_size, :instructions, :stack
+  attr_accessor :pointer, :instructions, :stack
 
   def initialize(stack_size)
     @stack_size = stack_size
     @pointer = 0
-    @instructions = []
+    @instructions = Array.new(stack_size)
     @stack = []
   end
 
@@ -14,22 +14,24 @@ class Computer
   end
 
   def insert(command, value=nil)
-    @instructions << ({
+    @instructions[@pointer] = {
       command: command,
       param: value
-    })
+    }
+    increment_pointer
   end
 
   def execute
     while true do
       instruction = @instructions[@pointer]
-      exit unless instruction
+      break unless instruction
+
       if instruction[:param]
         send(instruction[:command].downcase, instruction[:param])
       else
         send(instruction[:command].downcase)
       end
-      @pointer = @pointer.next
+
     end
   end
 
@@ -37,15 +39,28 @@ class Computer
 
   def push(value)
     @stack << value
+    increment_pointer
   end
 
   def mult
     values = @stack.pop(2)
-    @stack<<values.inject(:*)
+    @stack << values.inject(:*)
+    increment_pointer
   end
 
-  def call(value)
-    @pointer = value
+  def print
+    increment_pointer
   end
 
+  def call(address)
+    @pointer = address
+  end
+
+  def ret
+    @stack.pop
+  end
+
+  def increment_pointer
+    @pointer = @pointer.next
+  end
 end
