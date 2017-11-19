@@ -48,6 +48,4 @@ RSpec.describe V1::ComputersController, type: :service do
     end
 
   end
-
-
 end
