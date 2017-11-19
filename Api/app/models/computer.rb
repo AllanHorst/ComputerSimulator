@@ -16,20 +16,20 @@ class Computer < ApplicationRecord
     self.stack[self.pointer] = {
       instruction: instruction,
       param: value
-    }
+    }.to_json
     increment_pointer
   end
 
   def execute
     self.data = []
     while true do
-      instruction = self.stack[self.pointer]
-      break unless instruction
+      item = stack_item
+      break unless item
 
-      if instruction[:param]
-        send(instruction[:instruction].downcase, instruction[:param])
+      if item["param"]
+        send(item["instruction"].downcase, item["param"])
       else
-        send(instruction[:instruction].downcase)
+        send(item["instruction"].downcase)
       end
 
     end
@@ -67,5 +67,9 @@ class Computer < ApplicationRecord
 
   def increment_pointer
     self.pointer = self.pointer.next
+  end
+
+  def stack_item
+    JSON.parse self.stack[self.pointer] if self.stack[self.pointer]
   end
 end

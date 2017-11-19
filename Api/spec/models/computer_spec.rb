@@ -48,18 +48,20 @@ RSpec.describe Computer, type: :model do
 
     it 'insert new instruction into stack' do
       computer.insert('PUSH', 10)
-      expect(computer.stack[start_address]).to eq({
-        instruction: 'PUSH',
-        param: 10
+      stack_item = computer.stack[start_address]
+      expect(JSON.parse stack_item).to eq({
+        "instruction" => 'PUSH',
+        "param" => 10
       })
     end
 
     it 'insert into position' do
       computer.set_address(new_address)
       computer.insert('PUSH', 10)
-      expect(computer.stack[new_address]).to eq({
-        instruction: 'PUSH',
-        param: 10
+      stack_item = computer.stack[new_address]
+      expect(JSON.parse stack_item).to eq({
+        "instruction" => 'PUSH',
+        "param" => 10
       })
     end
 
