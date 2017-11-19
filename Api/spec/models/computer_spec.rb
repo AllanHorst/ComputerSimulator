@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe V1::ComputersController, type: :service do
+RSpec.describe Computer, type: :model do
 
   let(:computer) {
     Computer.new(20)
@@ -45,6 +45,47 @@ RSpec.describe V1::ComputersController, type: :service do
     it 'insert new command into instructions' do
       computer.insert('push', 10)
       expect(computer.instructions.size).to eq(1)
+    end
+
+  end
+
+  context '#execute' do
+
+    describe 'stack' do
+      before(:each) do
+        computer.insert('PUSH', 10)
+        computer.insert('PUSH', 50)
+        computer.insert('MULT')
+        computer.insert('PRINT')
+        computer.insert('CALL', 20)
+        computer.insert('PUSH', 2)
+        computer.insert('PUSH', 2)
+        computer.insert('MULT')
+        computer.insert('PRINT')
+        computer.execute
+      end
+
+      it 'stack should be equal' do
+        expect(computer.stack).to eq([10, 50, 500, 2, 2, 4])
+      end
+    end
+
+    context 'MULT' do
+      before(:each) do
+        computer.insert('PUSH', 10)
+        computer.insert('PUSH', 50)
+        computer.insert('MULT')
+        computer.execute
+      end
+      it 'last value must be the multiplication' do
+        expect(computer.stack.last).to eq(500)
+      end
+
+      it 'should pop last values' do
+        expect(computer.stack.count).to eq(1)
+        expect(computer.stack).to_not include(10)
+        expect(computer.stack).to_not include(50)
+      end
     end
 
   end
