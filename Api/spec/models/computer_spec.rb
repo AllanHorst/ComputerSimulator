@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Computer, type: :model do
 
   let(:computer) {
-    Computer.new(20)
+    Computer.new({stack_size: 20})
   }
 
   let(:new_address) {
@@ -18,8 +18,15 @@ RSpec.describe Computer, type: :model do
       expect(computer.pointer).to eq(0)
     end
 
-    it 'instructions cannot be nil' do
-      expect(computer.instructions.count).to eq(20)
+    it 'stack cannot be nil' do
+      expect(computer.stack.count).to eq(20)
+    end
+  end
+
+  context '#save' do
+
+    it 'array stringfied' do
+      expect{ computer.save }.to change(Computer, :count).by(1)
     end
   end
 
@@ -39,9 +46,9 @@ RSpec.describe Computer, type: :model do
 
   context '#insert' do
 
-    it 'insert new command into instructions' do
+    it 'insert new command into stack' do
       computer.insert('PUSH', 10)
-      expect(computer.instructions[start_address]).to eq({
+      expect(computer.stack[start_address]).to eq({
         command: 'PUSH',
         param: 10
       })
@@ -50,7 +57,7 @@ RSpec.describe Computer, type: :model do
     it 'insert into position' do
       computer.set_address(new_address)
       computer.insert('PUSH', 10)
-      expect(computer.instructions[new_address]).to eq({
+      expect(computer.stack[new_address]).to eq({
         command: 'PUSH',
         param: 10
       })
@@ -60,7 +67,7 @@ RSpec.describe Computer, type: :model do
 
   context '#execute' do
 
-    it 'stack' do
+    it 'data' do
       computer.insert('PUSH', 10)
       computer.insert('PUSH', 50)
       computer.insert('MULT')
@@ -73,7 +80,7 @@ RSpec.describe Computer, type: :model do
       computer.set_address(start_address)
       computer.execute
 
-      expect(computer.stack).to eq([500, 4])
+      expect(computer.data).to eq([500, 4])
     end
 
     context 'MULT' do
@@ -86,13 +93,13 @@ RSpec.describe Computer, type: :model do
       end
 
       it 'last value must be the multiplication' do
-        expect(computer.stack.last).to eq(500)
+        expect(computer.data.last).to eq(500)
       end
 
       it 'should pop last values' do
-        expect(computer.stack.count).to eq(1)
-        expect(computer.stack).to_not include(10)
-        expect(computer.stack).to_not include(50)
+        expect(computer.data.count).to eq(1)
+        expect(computer.data).to_not include(10)
+        expect(computer.data).to_not include(50)
       end
     end
 
@@ -104,7 +111,7 @@ RSpec.describe Computer, type: :model do
       computer.set_address(start_address)
       computer.execute
 
-      expect(computer.stack).to eq([10, 50])
+      expect(computer.data).to eq([10, 50])
     end
 
   end

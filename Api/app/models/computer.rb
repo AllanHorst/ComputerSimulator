@@ -1,20 +1,19 @@
-class Computer
-  include ActiveModel::Model
-  attr_accessor :pointer, :instructions, :stack
+class Computer < ApplicationRecord
+  attr_accessor :data
 
-  def initialize(stack_size)
-    @stack_size = stack_size
-    @pointer = 0
-    @instructions = Array.new(stack_size)
-    @stack = []
+  def initialize(params={})
+    stack_size = params.delete(:stack_size)
+    super
+    self.pointer = 0
+    self.stack = Array.new(stack_size)
   end
 
   def set_address(address)
-    @pointer = address
+    self.pointer = address
   end
 
   def insert(command, value=nil)
-    @instructions[@pointer] = {
+    self.stack[self.pointer] = {
       command: command,
       param: value
     }
@@ -22,12 +21,9 @@ class Computer
   end
 
   def execute
+    self.data = []
     while true do
-      instruction = @instructions[@pointer]
-      puts 'POINTER<<<<<'
-      p @pointer
-      p instruction
-      p stack
+      instruction = self.stack[self.pointer]
       break unless instruction
 
       if instruction[:param]
@@ -42,27 +38,27 @@ class Computer
   private
 
   def push(value)
-    @stack << value
+    self.data << value
     increment_pointer
   end
 
   def mult
-    values = @stack.pop(2)
-    @stack << values.inject(:*)
+    values = self.data.pop(2)
+    self.data << values.inject(:*)
     increment_pointer
   end
 
   def print
     increment_pointer
-    @stack.pop
+    self.data.pop
   end
 
   def call(address)
-    @pointer = address
+    self.pointer = address
   end
 
   def stop
-    @pointer = -1
+    self.pointer = -1
   end
 
   def ret
@@ -70,6 +66,6 @@ class Computer
   end
 
   def increment_pointer
-    @pointer = @pointer.next
+    self.pointer = self.pointer.next
   end
 end
