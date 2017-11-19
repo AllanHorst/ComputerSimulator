@@ -5,7 +5,7 @@ class Computer < ApplicationRecord
     stack_size = params.delete(:stack_size)
     super
     self.pointer = 0
-    self.stack = Array.new(stack_size)
+    self.stack = Array.new(stack_size.to_i)
   end
 
   def set_address(address)
