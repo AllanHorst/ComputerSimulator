@@ -46,10 +46,10 @@ RSpec.describe Computer, type: :model do
 
   context '#insert' do
 
-    it 'insert new command into stack' do
+    it 'insert new instruction into stack' do
       computer.insert('PUSH', 10)
       expect(computer.stack[start_address]).to eq({
-        command: 'PUSH',
+        instruction: 'PUSH',
         param: 10
       })
     end
@@ -58,7 +58,7 @@ RSpec.describe Computer, type: :model do
       computer.set_address(new_address)
       computer.insert('PUSH', 10)
       expect(computer.stack[new_address]).to eq({
-        command: 'PUSH',
+        instruction: 'PUSH',
         param: 10
       })
     end

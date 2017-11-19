@@ -12,9 +12,9 @@ class Computer < ApplicationRecord
     self.pointer = address
   end
 
-  def insert(command, value=nil)
+  def insert(instruction, value=nil)
     self.stack[self.pointer] = {
-      command: command,
+      instruction: instruction,
       param: value
     }
     increment_pointer
@@ -27,9 +27,9 @@ class Computer < ApplicationRecord
       break unless instruction
 
       if instruction[:param]
-        send(instruction[:command].downcase, instruction[:param])
+        send(instruction[:instruction].downcase, instruction[:param])
       else
-        send(instruction[:command].downcase)
+        send(instruction[:instruction].downcase)
       end
 
     end
