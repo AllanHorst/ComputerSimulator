@@ -61,4 +61,19 @@ RSpec.describe V1::ComputersController, type: :controller do
       end
     end
   end
+
+  context '#insert_instruction' do
+
+    it 'load computer' do
+      post :execute, params: { computer_id: computer.id}
+      expect(assigns(:computer)).to eq(computer)
+    end
+
+    it 'receive execute' do
+      expect_any_instance_of(Computer).to receive(:execute)
+      post :execute, params: { computer_id: computer.id}
+    end
+
+  end
+
 end

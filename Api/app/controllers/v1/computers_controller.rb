@@ -1,5 +1,5 @@
 class V1::ComputersController < ApplicationController
-  before_action :set_computer, only: [:set_address, :insert_instruction]
+  before_action :set_computer, only: [:set_address, :insert_instruction, :execute]
   def new
     @computer = Computer.create({stack_size: params[:stack]})
     render json: @computer, only: [:id]
@@ -13,6 +13,10 @@ class V1::ComputersController < ApplicationController
   def insert_instruction
     @computer.insert params[:instruction], params[:arg]
     @computer.save
+  end
+
+  def execute
+    @computer.execute
   end
 
   private
