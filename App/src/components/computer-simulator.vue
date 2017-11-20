@@ -26,7 +26,7 @@
             <button class="btn default" v-on:click="addToStack()">Add</button>
           </li>
 
-          <li v-for="(item, index) in stack.slice().reverse()" v-bind:key="index">
+          <li v-for="(item, index) in stack" v-bind:key="index">
             <span class="address">{{index}}</span>
             <span class="instruction">{{item.instruction}}</span>
             <span class="param">{{item.param}}</span>
