@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "node server.js",
-    "build": "webpack-dev-server --inline --progress --config build/webpack.prod.conf.js",
+    "build": "node build/build.js",
     "postinstall": "npm install express"
   },
   "dependencies": {
