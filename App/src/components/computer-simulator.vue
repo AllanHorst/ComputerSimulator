@@ -55,8 +55,7 @@
 </template>
 
 <script>
-// URL = 'https://computer-simulator-api.herokuapp.com/v1/computers/'
-URL = 'https://computer-simulator-api.herokuapp.com/v1/computers/'
+URL = process.env.NODE_ENV == 'development' ? 'http://localhost:3000/v1/computers/' : 'https://computer-simulator-api.herokuapp.com/v1/computers/'
 export default {
   name: 'computer-simulator',
   data () {
@@ -134,7 +133,6 @@ export default {
   }
 
 }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -145,5 +143,9 @@ export default {
 
   .container {
     padding: 5%;
+  }
+
+  li {
+    list-style: none;
   }
 </style>

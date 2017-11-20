@@ -1,5 +1,5 @@
 class Computer < ApplicationRecord
-  attr_accessor :data
+  attr_accessor :data, :output
 
   def initialize(params={})
     stack_size = params.delete(:stack_size)
@@ -22,6 +22,7 @@ class Computer < ApplicationRecord
 
   def execute
     self.data = []
+    self.output = []
     while true do
       item = stack_item
       break unless item
@@ -33,7 +34,7 @@ class Computer < ApplicationRecord
       end
 
     end
-    self.data
+    self.output
   end
 
   private
@@ -51,7 +52,7 @@ class Computer < ApplicationRecord
 
   def print
     increment_pointer
-    self.data.pop
+    self.output << self.data.pop
   end
 
   def call(address)
