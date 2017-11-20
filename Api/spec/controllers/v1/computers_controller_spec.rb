@@ -83,6 +83,16 @@ RSpec.describe V1::ComputersController, type: :controller do
       post :execute, params: { computer_id: computer.id}
     end
 
+    it 'returns data' do
+      computer.insert('PUSH', 100)
+      computer.insert('PUSH', 50)
+      computer.set_address(0)
+      computer.save
+      post :execute, params: { computer_id: computer.id}
+      response_json = JSON.parse response.body
+      expect(response_json.count).to eq(2)
+    end
+
   end
 
 end

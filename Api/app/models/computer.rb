@@ -27,12 +27,13 @@ class Computer < ApplicationRecord
       break unless item
 
       if item["param"]
-        send(item["instruction"].downcase, item["param"])
+        send(item["instruction"].downcase, item["param"].to_i)
       else
         send(item["instruction"].downcase)
       end
 
     end
+    self.data
   end
 
   private
