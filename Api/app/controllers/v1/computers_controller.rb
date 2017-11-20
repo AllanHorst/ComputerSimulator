@@ -13,6 +13,7 @@ class V1::ComputersController < ApplicationController
   def insert_instruction
     @computer.insert params[:instruction], params[:arg]
     @computer.save
+    render json: @computer, only: [:stack]
   end
 
   def execute
