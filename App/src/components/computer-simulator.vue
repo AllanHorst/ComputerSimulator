@@ -56,7 +56,7 @@
 
 <script>
 // URL = 'https://computer-simulator-api.herokuapp.com/v1/computers/'
-URL = 'http://localhost:3000/v1/computers/'
+URL = 'https://computer-simulator-api.herokuapp.com/v1/computers/'
 export default {
   name: 'computer-simulator',
   data () {
