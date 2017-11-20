@@ -6,8 +6,10 @@
     <div class="container">
       <input type="number" placeholder="Stack's Size" v-model="stackSize">
       <button class="btn primary" v-on:click="createComputer()">Create Computer</button>
-
       <div class="list" v-if="computerId != null">
+        <h4>Current Address: {{currentPointer}}</h4>
+        <input type="number" placeholder="New Address" v-model="newAddress">
+        <button class="btn primary" v-on:click="setAddress()">Set Address</button>
         <ul>
 
           <li class="new">
@@ -21,7 +23,7 @@
               placeholder="Param"
               v-model="stackItem.arg"
               v-bind:disabled="!stackItem.instruction || !stackItem.instruction.param">
-            <button class="btn primary" v-on:click="addToStack()">Create Computer</button>
+            <button class="btn primary" v-on:click="addToStack()">Add</button>
           </li>
 
           <li v-for="(item, index) in stack.slice().reverse()" v-bind:key="index">
@@ -43,6 +45,8 @@ export default {
   name: 'computer-simulator',
   data () {
     return {
+      currentPointer: 0,
+      newAddress: null,
       stackSize: '',
       computerId: null,
       stack: [],
@@ -93,14 +97,15 @@ export default {
           })
           this.stackItem = {}
       })
-    }
-  },
-  filters: {
-    reverse (value) {
-      console.log('so loko')
-      return value.slice().reverse()
+    },
+    setAddress() {
+      this.$http.patch(URL + `${this.computerId}/stack/pointer`, {addr: this.newAddress}).then(data => {
+        this.currentPointer = data.body.pointer
+        this.newAddress = null
+      })
     }
   }
+
 }
 
 </script>
