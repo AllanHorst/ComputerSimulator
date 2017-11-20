@@ -1,1 +1,0 @@
-{"version":3,"sources":["app.e2e3fd3f777b59189500a44e535a2ae0.css"],"names":[],"mappings":"AAcA,uCACE,iBAAmB,CACpB,AACD,4BACE,UAAY,CACb","file":"app.e2e3fd3f777b59189500a44e535a2ae0.css","sourcesContent":["\n\n\n\n\n\n\n\n\n\n\n\n\n\nh1[data-v-b14f1292], p[data-v-b14f1292] {\n  text-align: center;\n}\n.container[data-v-b14f1292] {\n  padding: 5%;\n}\n"]}
