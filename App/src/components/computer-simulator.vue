@@ -4,14 +4,14 @@
     <p>Choose the size of your stack and generate a new computer</p>
 
     <div class="container">
-      <input type="number" placeholder="Stack's Size" v-model="stackSize">
-      <button class="btn primary" v-on:click="createComputer()">Create Computer</button>
-      <div class="list" v-if="computerId != null">
-        <h4>Current Address: {{currentPointer}}</h4>
-        <input type="number" placeholder="New Address" v-model="newAddress">
-        <button class="btn primary" v-on:click="setAddress()">Set Address</button>
-        <ul>
 
+      <div v-if="computerId == null">
+        <input type="number" placeholder="Stack's Size" v-model="stackSize">
+        <button class="btn primary" v-on:click="createComputer()">Create Computer</button>
+      </div>
+
+      <div class="list" v-if="computerId != null">
+        <ul>
           <li class="new">
             <label for="instruction">Instruction</label>
             <select id="instruction" v-model="stackItem.instruction">
@@ -23,7 +23,7 @@
               placeholder="Param"
               v-model="stackItem.arg"
               v-bind:disabled="!stackItem.instruction || !stackItem.instruction.param">
-            <button class="btn primary" v-on:click="addToStack()">Add</button>
+            <button class="btn default" v-on:click="addToStack()">Add</button>
           </li>
 
           <li v-for="(item, index) in stack.slice().reverse()" v-bind:key="index">
@@ -32,8 +32,24 @@
             <span class="param">{{item.param}}</span>
           </li>
         </ul>
+
+        <h4>Current Address: {{currentPointer}}</h4>
+        <input type="number" placeholder="New Address" v-model="newAddress">
+        <button class="btn default" v-on:click="setAddress()">Set Address</button>
+        <button class="btn primary" v-on:click="execute()">Execute Program</button>
+
+      </div>
+
+      <div class="results" v-if="results.length > 0">
+        <h2>Results</h2>
+        <ul>
+          <li v-for="(item, index) in results" v-bind:key="index">
+            <span>{{item}}</span>
+          </li>
+        </ul>
       </div>
     </div>
+
 
   </div>
 </template>
@@ -45,12 +61,13 @@ export default {
   name: 'computer-simulator',
   data () {
     return {
-      currentPointer: 0,
+      currentPointer: null,
       newAddress: null,
       stackSize: '',
       computerId: null,
       stack: [],
       stackItem: {},
+      results: [],
       instructions: [
         {
           name: 'PUSH',
@@ -82,6 +99,7 @@ export default {
     createComputer() {
       this.$http.post(URL, {stack: this.stackSize}).then(data => {
         this.computerId = data.body.id
+        this.currentPointer = data.body.pointer
       })
     },
     addToStack() {
@@ -96,6 +114,7 @@ export default {
             return JSON.parse(item)
           })
           this.stackItem = {}
+          this.currentPointer = data.body.pointer
       })
     },
     setAddress() {
@@ -103,7 +122,15 @@ export default {
         this.currentPointer = data.body.pointer
         this.newAddress = null
       })
+    },
+    execute() {
+      this.$http.post(URL + `${this.computerId}/exec`).then(data => {
+        this.results = data.body
+      })
     }
+  },
+  mounted() {
+    this.stackItem.instruction = this.instructions[0]
   }
 
 }
