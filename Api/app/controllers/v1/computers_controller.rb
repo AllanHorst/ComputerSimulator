@@ -8,6 +8,7 @@ class V1::ComputersController < ApplicationController
   def set_address
     @computer.set_address params[:addr]
     @computer.save
+    render json: @computer, only: [:pointer]
   end
 
   def insert_instruction

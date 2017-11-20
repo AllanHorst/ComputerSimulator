@@ -33,6 +33,10 @@ RSpec.describe V1::ComputersController, type: :controller do
       computer.reload
       expect(computer.pointer).to eq(10)
     end
+
+    it 'returns new address' do
+      expect(JSON.parse response.body).to eq({"pointer" => 10})
+    end
   end
 
 
